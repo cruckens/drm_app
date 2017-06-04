@@ -2,8 +2,9 @@ import socket
 from easygui import enterbox, msgbox
 
 
-ip = enterbox('Enter IP')
-
+ip = enterbox('Enter IP(or leave empty for default)')
+if ip == '':
+    ip = '93.76.224.194'
 
 def session(in_data):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,7 +23,7 @@ def session(in_data):
     except OSError:
         return "Wrong IP"
 
-    sock.send(in_data.encode())
+    sock.sendall(in_data.encode())
     data = sock.recv(packetsize)
     while True:
         try:

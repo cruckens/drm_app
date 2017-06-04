@@ -12,15 +12,15 @@ class User():
         self.collection = [Csong.Song(f) for f in listdir('mus_library') if isfile(join('mus_library', f))] # list of song objects
 
     def __str__(self):
-        return "Имя: %s\nНа счету: %d золотых\nПесен приобретено: %d" % \
-               (self.id, self.__gold, len([i for i in self.collection if i.owned==True]))
+        return "Имя аккаунта: %s\nЗолота: %d\nПесен приобретено %d" \
+               %(self.id, self.__gold,len([song for song in self.collection if song.owned == True]))
 
     def get_sessionkey(self):
         return str(self.__sessionkey)
 
     def set_sessionkey(self):
         self.__sessionkey = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits)
-                                    for _ in range(16))
+                                    for _ in range(8))
 
     def expand_collection(self, sname):
         for song in self.collection:
@@ -41,8 +41,6 @@ class User():
     def get_collection(self):
         return "\n".join('\'' + i.name + '\', $' + str(i.get_price()) + ', owned: '
                          + str(i.owned) for i in self.collection)
+
     def set_gold(self,amount):
         self.__gold = amount
-
-    def get_gold(self):
-        return str(self.__gold)

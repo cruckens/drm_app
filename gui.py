@@ -1,5 +1,5 @@
 from easygui import *
-import re, client, tcp_pickle, random, Cuser, streamplay
+import re, client, tcp_pickle, random, streamplay, Cuser
 
 
 def login_procedure():
@@ -61,9 +61,9 @@ def download(): # синхронизация библиотек
 username = login_procedure()
 playlist = [song.name for song in username.collection if song.owned == True]
 choices = ['Магазин', 'Личная коллекция', 'Информация об аккаунте','Сменить пользователя',]
-facts = ['Это приложение написано за неделю', 'Любишь музыку - люби и DRM',
-         'У программы есть репазитарий', 'Почему этим занимается девопс', 'Спасибо за пользование',
-         'Скажи спасибо, что не в консоли', 'Организационный момент','Хвастунишка','I am feeling myself good']
+facts = ['Сделано в ХАИ', 'Любишь музыку - люби и DRM', 'У программы есть репазитарий',
+         'Почему этим занимается девопс', 'Спасибо за пользование','На улице тепло',
+         'Организационный момент','Хвастунишка','I am feeling myself good']
 title = 'Music Player'
 button = buttonbox("Добро пожаловать, %s" %username.id, title = title, choices = choices)
 
@@ -108,10 +108,6 @@ while True:
         else:
             continue
     elif button == None:
-        exit()
+        break
     r_index = random.randrange(0, len(facts))
     button = buttonbox(facts[r_index], title = title, choices = choices)
-
-
-# добавить шифрование файлов
-# пересмотреть функционал прошлой версии вдруг чё забыл
