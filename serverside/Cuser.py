@@ -12,7 +12,8 @@ class User():
         self.collection = [Csong.Song(f) for f in listdir('mus_library') if isfile(join('mus_library', f))] # list of song objects
 
     def __str__(self):
-        return "Person: %s\nGold: %d" % (self.id, self.__gold)
+        return "Имя: %s\nНа счету: %d золотых\nПесен приобретено: %d" % \
+               (self.id, self.__gold, len([i for i in self.collection if i.owned==True]))
 
     def get_sessionkey(self):
         return str(self.__sessionkey)
@@ -38,8 +39,10 @@ class User():
 
 
     def get_collection(self):
-        return "\n".join('\'' + i.name + '\' - $' + str(i.get_price()) + ', owned: '
+        return "\n".join('\'' + i.name + '\', $' + str(i.get_price()) + ', owned: '
                          + str(i.owned) for i in self.collection)
-
     def set_gold(self,amount):
         self.__gold = amount
+
+    def get_gold(self):
+        return str(self.__gold)

@@ -1,12 +1,5 @@
-# encrypt songs from root mus_library to user collection_library
-# set gold for users
-# set price for songs
-# update collection
-
 import glob
-
-from serverside import pickle_file
-
+import pickle_file
 
 def main():
     print('Encrypt files: encrypt <file_name>')
@@ -28,8 +21,6 @@ def main():
                 username.set_gold(int(cmd[2]))
                 pickle_file.filesave(username)
         if cmd[0] == 'setprice':
-
             cmd[1].set_price(cmd[2])
         if stream == 'quit':
             return
-

@@ -15,9 +15,7 @@ users = [pickle_file.fileload(f.split('.pickle')[0]) for f in listdir() if f.end
 while True:
     conn, addr = sock.accept() # new sock, client addr
     print('Connected', addr)
-    data = conn.recv(packetsize) # receive packets 1024 bytes length, decode
-    if not data:
-        break
+    data = conn.recv(packetsize)
     try:
         data = data.decode().split('\n') # разделение присланного пакета на элементы
     except ValueError:
@@ -38,7 +36,7 @@ while True:
 
     elif data[-1] == 'Reg':
         user = Cuser.User(data[0], str(pbkdf2_sha256.hash(data[1])))
-        user.set_gold(20)
+        user.set_gold(50)
         pickle_file.filesave(user, reg=True)
         print('User \'%s\' created from %s' %(user.id,addr))
         conn.send('Account created. Use your credentials to log in'.encode())
@@ -62,5 +60,6 @@ while True:
                         l = cipher.encrypt(f.read()).encode()
                         f.close()
                         conn.sendall(l)
+
     conn.close()
     print('Closed', addr)
