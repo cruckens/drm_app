@@ -4,7 +4,7 @@ class Song():
         if name.split('.')[-1] == 'wav':
             self.__price = 5
         else:
-            self.__price = 1
+            self.__price = 2
         self.owned = False
         self.key = '' # in development
 
@@ -15,5 +15,4 @@ class Song():
         return self.__price
 
     def set_price(self, new_price=0):
-        if new_price.isInteger:
             self.__price = new_price

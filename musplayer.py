@@ -6,19 +6,6 @@ This module is for playing mp3 (limited) and wav formatted audio file
 import pygame
 
 
-def playsound(soundfile):
-    """Play sound through default mixer channel in blocking manner.
-       This will load the whole sound into memory before playback
-    """
-    pygame.init()
-    pygame.mixer.init()
-    sound = pygame.mixer.Sound(soundfile)
-    clock = pygame.time.Clock()
-    sound.play()
-    while pygame.mixer.get_busy():
-        clock.tick(1000)
-
-
 def playmusic(soundfile):
     """Stream music with mixer.music module in blocking manner.
        This will stream the sound from disk while playing.
@@ -29,11 +16,6 @@ def playmusic(soundfile):
     pygame.mixer.music.load(soundfile)
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
-        for event in  pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    stopmusic()
-                    return 0
         clock.tick(1000)
 
 
@@ -59,8 +41,6 @@ def initMixer():
       1) replace a.mp3 file with it, say 'a.wav'
       2) In try except clause below replace "playmusic()" with "playsound()"
 
-'''
-
 try:
     initMixer()
     filename = 'serverside\\mus_library\\rave.wav'
@@ -73,3 +53,4 @@ except Exception:
     print("Unknown error")
 
 print("File ended")
+'''
