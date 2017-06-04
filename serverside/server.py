@@ -2,15 +2,15 @@ import socket
 import pickle_file, Cuser, tcp_pickle # need to refactor from subproject
 from passlib.hash import pbkdf2_sha256
 from os import listdir
+from encrypt import *
 
-host = 'localhost'
+host = '0.0.0.0'
 port = 8310
-packetsize = 100000
+packetsize = 10000
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # initialize socket
 sock.bind((host, port)) # bind port
 sock.listen(5) # number of connection in one time
 users = [pickle_file.fileload(f.split('.pickle')[0]) for f in listdir() if f.endswith('.pickle')]
-print(users)
 
 while True:
     conn, addr = sock.accept() # new sock, client addr
@@ -32,14 +32,15 @@ while True:
             user.set_sessionkey() # устанавливаем сеансовый ключ
             pickle_file.filesave(user) # сохраняем состояние юзера
             conn.send(tcp_pickle.pack(user))  # send user object back to client
-            users.append(user) # append list of users that were connecting since server is up
+            users.append(user) # append list of users with those who were connecting since server is up
         else:
             conn.send('Error'.encode()) # отправка ошибки
 
     elif data[-1] == 'Reg':
         user = Cuser.User(data[0], str(pbkdf2_sha256.hash(data[1])))
-        user.set_gold(10)
+        user.set_gold(20)
         pickle_file.filesave(user, reg=True)
+        print('User \'%s\' created from %s' %(user.id,addr))
         conn.send('Account created. Use your credentials to log in'.encode())
 
     elif data[-1] == 'Buy':
@@ -54,15 +55,12 @@ while True:
         for user in users:
             if data[0] == user.get_sessionkey():
                 for song in user.collection:
-                    if song.owned == True:
+                    if song.owned == True and data[1] == song.name:
                         f = open('mus_library/' + song.name, 'rb')
+                        cipher = AESCipher(user.get_sessionkey().encode('utf-8'), user.password)
                         print('Sending to %s file %s'%(addr,song.name))
-                        l = f.read(packetsize)
-                        while (l):
-                            conn.send(l)
-                            l = f.read(packetsize)
+                        l = cipher.encrypt(f.read()).encode()
                         f.close()
-            else:
-                conn.send('Error'.encode())
+                        conn.sendall(l)
     conn.close()
     print('Closed', addr)

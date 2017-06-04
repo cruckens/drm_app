@@ -19,7 +19,7 @@ class User():
 
     def set_sessionkey(self):
         self.__sessionkey = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits)
-                                    for _ in range(20))
+                                    for _ in range(8))
 
     def expand_collection(self, sname):
         for song in self.collection:
@@ -38,7 +38,8 @@ class User():
 
 
     def get_collection(self):
-        return "\n".join(i.name + ' - $' + str(i.get_price()) + ', owned: ' + str(i.owned) for i in self.collection)
+        return "\n".join('\'' + i.name + '\' - $' + str(i.get_price()) + ', owned: '
+                         + str(i.owned) for i in self.collection)
 
     def set_gold(self,amount):
         self.__gold = amount
